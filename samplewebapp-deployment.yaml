@@ -1,0 +1,50 @@
+# Namespace Definition
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: samplewebapp
+
+---
+# Deployment Definition
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: samplewebapp
+  namespace: samplewebapp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: samplewebapp
+  template:
+    metadata:
+      labels:
+        app: samplewebapp
+    spec:
+      containers:
+        - name: samplewebapp
+          image: tushardemo.azurecr.io/samplewebapp:latest  # Replace with your image path
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+---
+# Service Definition
+apiVersion: v1
+kind: Service
+metadata:
+  name: samplewebapp-service
+  namespace: samplewebapp
+spec:
+  type: LoadBalancer
+  selector:
+    app: samplewebapp
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
