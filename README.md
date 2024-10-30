@@ -1,2 +1,0 @@
-# samplewebapp-net
-samplewebapp-net
